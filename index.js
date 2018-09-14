@@ -9,6 +9,20 @@ app.use("/events", eventsRoute);
 app.use("/galleryItems", galleryItemsRoute);
 app.use("/notifications", notificationsRoute);
 
+app.use((req, res, next) => {
+    const error = new Error("Page not found!");
+    error.status = 404;
+    next(error);
+})
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500).json({
+        error: {
+            message: error.message
+        }
+    })
+})
+
 app
     .use(express.static("public"))
     .listen(port, function() {
