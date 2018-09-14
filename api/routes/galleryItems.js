@@ -9,7 +9,7 @@ router.get("/", function (req, res, next) {
 
 router.get("/:gallery_item_id", function (req, res, next) {
     res.status(200).send({
-        "message": "GET request for specific gallery item: " + req.params.gallery_id,
+        "message": "GET request for specific gallery item: " + req.params.gallery_item_id,
     })
 });
 
@@ -21,7 +21,7 @@ router.post("/", function (req, res, next) {
 
 router.delete("/:gallery_item_id", function (req, res, next) {
     res.status(200).send({
-        "message": "DELETE request to delete specific gallery_item: " + req.params.gallery_id,
+        "message": "DELETE request to delete specific gallery_item: " + req.params.gallery_item_id,
     })
 });
 
