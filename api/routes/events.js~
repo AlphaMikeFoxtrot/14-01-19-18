@@ -78,7 +78,7 @@ router.post("/", function(req, res, next) {
                     meta: {
                         type: "GET", 
                         description: "Get a list of all the events", 
-                        url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events"
+                        url: "https://nameless-harbor-15056.herokuapp.com/events"
                     }
                 }
             })
@@ -105,7 +105,7 @@ router.patch("/:event_id", function (req, res, next) {
                 message: "Successfully updated event details", 
                 meta: {
                     type: "GET", 
-                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + id
+                    url: "https://nameless-harbor-15056.herokuapp.com/events/" + id
                 }
             })
         })
@@ -127,7 +127,7 @@ router.delete("/:event_id", function (req, res, next) {
                 meta: {
                     type: "GET",
                     description: "Get a list of all the events",
-                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events"
+                    url: "https://nameless-harbor-15056.herokuapp.com/events"
                 }
             })
         })
