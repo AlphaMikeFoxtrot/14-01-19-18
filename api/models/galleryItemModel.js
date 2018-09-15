@@ -5,6 +5,10 @@ const galleryItemSchema = mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId
     },
+    branch_id: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Branch"
+    },
     imagePath: {
         type: mongoose.Schema.Types.Mixed,
         required: true

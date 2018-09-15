@@ -23,7 +23,8 @@ router.post("/", (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         location: req.body.location, 
         name: req.body.name,
-        type: req.body.type
+        type: req.body.type,
+        contact: req.body.contact
     })
     branch
         .save()

@@ -5,12 +5,15 @@ body {
 }
 
 .root-container {
-    height: 86vh;
-    width: 86vw;
+    height: 20vh;
+    width: 20vw;
     align-self: center;
     padding: 0;
     margin: 0;
     display: flex;
+    box-shadow: 5px 5px 15px;
+    border-radius: 35px;
+    background-color: #eee;
     align-items: center;
     justify-content: center;
 }
