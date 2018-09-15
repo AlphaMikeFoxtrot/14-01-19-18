@@ -1,9 +1,15 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .root-container {
-    height: 100vh;
-    width: 100vw;
+    height: 86vh;
+    width: 86vw;
+    align-self: center;
     padding: 0;
     margin: 0;
-    background-color: #fff,;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -4,10 +4,20 @@ const port = process.env.PORT || 8080;
 const eventsRoute = require("./api/routes/events");
 const galleryItemsRoute = require("./api/routes/galleryItems");
 const notificationsRoute = require("./api/routes/notifications");
+const bodyParser = require("body-parser")
+const mongoose = require("mongoose")
+
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json());
+
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb+srv://nasr-admin:nasr-admin-password@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true");
 
 app.use("/events", eventsRoute);
 app.use("/galleryItems", galleryItemsRoute);
 app.use("/notifications", notificationsRoute);
+
+app.use(express.static("public"))
 
 app.use((req, res, next) => {
     const error = new Error("Page not found!");
@@ -23,8 +33,6 @@ app.use((error, req, res, next) => {
     })
 })
 
-app
-    .use(express.static("public"))
-    .listen(port, function() {
+app.listen(port, function() {
         console.log("listening on port " + port);
     })
