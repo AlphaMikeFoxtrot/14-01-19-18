@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb+srv://nasr-admin:nasr-admin-password@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true");
 
-app.use("/events", eventsRoute);
-app.use("/galleryItems", galleryItemsRoute);
-app.use("/notifications", notificationsRoute);
+app.use("/api/v1/events", eventsRoute);
+app.use("/api/v1/galleryItems", galleryItemsRoute);
+app.use("/api/v1/notifications", notificationsRoute);
 
 app.use(express.static("public"))
 
