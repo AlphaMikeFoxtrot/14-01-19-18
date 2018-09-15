@@ -8,8 +8,12 @@ const branchSchema = mongoose.Schema({
         required: true, 
     },
     name: {
-        type: String, 
+        type: mongoose.Schema.Types.Mixed, 
         required: true,
+    },
+    type: {
+        type: String, 
+        required: true
     }
 
 })
