@@ -20,7 +20,8 @@ app.use("/api/v1/galleryItems", galleryItemsRoute);
 app.use("/api/v1/notifications", notificationsRoute);
 app.use("/api/v1/branch", branchRoute);
 
-app.use(express.static("public"))
+app.use("/api/v1/docs/galleryItems", express.static("galleryItems"));
+app.use(express.static("public"));
 
 app.use((req, res, next) => {
     const error = new Error("Page not found!");

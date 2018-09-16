@@ -1,4 +1,5 @@
-const router = express.Router();
+const epxress = require('express')
+const router = epxress.Router();
 const mongoose = require("mongoose")
 
 const Event = require("../models/eventModel");
