@@ -108,7 +108,7 @@ router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
                 branch_id: req.body.branch_id,
                 caption: req.body.caption,
                 description: req.body.description,
-                imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/")
+                imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
             })
             return galleryItem.save()
         })

@@ -13,7 +13,7 @@ const branchSchema = mongoose.Schema({
     },
     type: {
         type: String, 
-        required: true
+        required: true  
     },
     contact: {
         type: mongoose.Schema.Types.Mixed, 
