@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
-require("dotenv").config();
+// require("dotenv").config();
 
 const eventsRoute = require("./api/routes/events");
 const galleryItemsRoute = require("./api/routes/galleryItems");
