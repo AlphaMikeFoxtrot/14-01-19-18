@@ -39,4 +39,5 @@ app.use((error, req, res, next) => {
 
 app.listen(port, function() {
         console.log("listening on port " + port);
+        console.log(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`)
     })
