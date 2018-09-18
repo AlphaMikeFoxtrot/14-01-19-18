@@ -1,9 +1,8 @@
 const express = require('express')
 const app = express();
 const port = process.env.PORT || 8080;
-const bodyParser = require("body-parser")
-const mongoose = require("mongoose")
-// require("dotenv").config();
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const eventsRoute = require("./api/routes/events");
 const galleryItemsRoute = require("./api/routes/galleryItems");
@@ -14,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb+srv://nasr-adming:nasr-admin-password@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true");
+mongoose.connect("mongodb+srv://nasr-admin:nasr-admin-password@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true");
 
 app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/galleryItems", galleryItemsRoute);
