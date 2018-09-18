@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`);
+mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_ATL_PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`);
 
 app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/galleryItems", galleryItemsRoute);
