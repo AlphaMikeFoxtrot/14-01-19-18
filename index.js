@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
 // mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_ATL_PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`);
-mongoose.connect(process.env.MLAB_URI);
+mongoose.connect("mongodb://mlab-nasr-admin:"+process.env.MLAB_PSWD+"@ds261332.mlab.com:61332/nasr-school-api-v1");
 
 app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/galleryItems", galleryItemsRoute);
