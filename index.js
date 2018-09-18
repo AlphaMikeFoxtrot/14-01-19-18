@@ -40,4 +40,5 @@ app.use((error, req, res, next) => {
 
 app.listen(port, function() {
         console.log("listening on port " + port);
+        console.log(process.env.MON_ATL_URME)
     })
