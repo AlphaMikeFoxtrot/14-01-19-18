@@ -8,7 +8,7 @@ const d = Date.now();
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "/galleryItems/");
+        cb(null, "./galleryItems/");
     }, 
     filename: function(req, file, cb){
         cb(null,  file.originalname);
@@ -95,88 +95,135 @@ router.get("/:gallery_item_id", function (req, res, next) {
         })
 });
 
-router.post("/", upload.single("gallery_item_image"), function (req, res, next) {
+// router.post("/", upload.single("gallery_item_image"), function (req, res, next) {
 
-    galleryItem = new GalleryItem({
-        _id: mongoose.Types.ObjectId(),
-        branch_id: req.body.branch_id,
-        caption: req.body.caption,
-        description: req.body.description,
-        absoluteImagePath: req.file.path,
-        imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
-    })
-    galleryItem
-        .save()
+//     galleryItem = new GalleryItem({
+//         _id: mongoose.Types.ObjectId(),
+//         branch_id: req.body.branch_id,
+//         caption: req.body.caption,
+//         description: req.body.description,
+//         absoluteImagePath: req.file.path,
+//         imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
+//     })
+//     galleryItem
+//         .save()
+//         .then((response) => {
+//                 console.log(response);
+//                 res.status(201).json({
+//                     message: "Gallery item successfully added to the database",
+//                     galleryItem: {
+//                         _id: response._id,
+//                         branch_id: response.branch_id,
+//                         imagePath: response.imagePath.replace("\\", "/"),
+//                         caption: response.caption,
+//                         description: response.description,
+//                         date: response.date,
+//                         absoluteImagePath: response.absoluteImagePath,
+//                         meta: {
+//                             type: "GET",
+//                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
+//                         }
+//                     }
+//                 })
+//             })
+//             .catch((error) => {
+//                 console.log(error);
+//                 res.status(500).json({
+//                     error: error
+//                 })
+//             })
+
+//     // Branch
+//     //     .findById({ _id: req.body.branch_id })
+//     //     .exec()
+//     //     .then((doc) => {
+//     //         if(!doc || req.body.branch_id.length < 24) {
+//     //             return res.status(404).json({
+//     //                 message: "Invalid Branch ID",
+//     //             })
+//     //         }
+//     //         galleryItem = new GalleryItem({
+//     //             _id: mongoose.Types.ObjectId(),
+//     //             branch_id: req.body.branch_id,
+//     //             caption: req.body.caption,
+//     //             description: req.body.description,
+//     //             absoluteImagePath: req.file.path,
+//     //             imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
+//     //         })
+//     //         return galleryItem.save()
+//     //     })
+//     //     .then((response) => {
+//     //             console.log(response);
+//     //             res.status(201).json({
+//     //                 message: "Gallery item successfully added to the database",
+//     //                 galleryItem: {
+//     //                     _id: response._id, 
+//     //                     branch_id: response.branch_id, 
+//     //                     imagePath: response.imagePath.replace("\\", "/"),
+//     //                     caption: response.caption, 
+//     //                     description: response.description, 
+//     //                     date: response.date,
+//     //                     absoluteImagePath: response.absoluteImagePath,
+//     //                     meta: {
+//     //                         type: "GET", 
+//     //                         url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
+//     //                     }
+//     //                 }
+//     //             })
+//     //         })
+//     //     .catch((error) => {
+//     //         console.log(error);
+//     //         res.status(500).json({
+//     //             error: error
+//     //         })
+//     //     })
+// })
+
+router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
+    console.log(req.file);
+    Branch
+        .findById({ _id: req.body.branch_id })
+        .exec()
+        .then((doc) => {
+            if(!doc) {
+                return res.status(404).json({
+                    message: "Invalid Branch ID",
+                })
+            }
+            galleryItem = new GalleryItem({
+                _id: mongoose.Types.ObjectId(),
+                branch_id: req.body.branch_id,
+                caption: req.body.caption,
+                description: req.body.description,
+                absoluteImagePath: req.file.path,
+                imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
+            })
+            return galleryItem.save()
+        })
         .then((response) => {
                 console.log(response);
                 res.status(201).json({
                     message: "Gallery item successfully added to the database",
                     galleryItem: {
-                        _id: response._id,
-                        branch_id: response.branch_id,
+                        _id: response._id, 
+                        branch_id: response.branch_id, 
                         imagePath: response.imagePath.replace("\\", "/"),
-                        caption: response.caption,
-                        description: response.description,
+                        caption: response.caption, 
+                        description: response.description, 
                         date: response.date,
-                        absoluteImagePath: response.absoluteImagePath,
                         meta: {
-                            type: "GET",
+                            type: "GET", 
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
                         }
                     }
                 })
             })
-            .catch((error) => {
-                console.log(error);
-                res.status(500).json({
-                    error: error
-                })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json({
+                error: error
             })
-
-    // Branch
-    //     .findById({ _id: req.body.branch_id })
-    //     .exec()
-    //     .then((doc) => {
-    //         if(!doc || req.body.branch_id.length < 24) {
-    //             return res.status(404).json({
-    //                 message: "Invalid Branch ID",
-    //             })
-    //         }
-    //         galleryItem = new GalleryItem({
-    //             _id: mongoose.Types.ObjectId(),
-    //             branch_id: req.body.branch_id,
-    //             caption: req.body.caption,
-    //             description: req.body.description,
-    //             absoluteImagePath: req.file.path,
-    //             imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
-    //         })
-    //         return galleryItem.save()
-    //     })
-    //     .then((response) => {
-    //             console.log(response);
-    //             res.status(201).json({
-    //                 message: "Gallery item successfully added to the database",
-    //                 galleryItem: {
-    //                     _id: response._id, 
-    //                     branch_id: response.branch_id, 
-    //                     imagePath: response.imagePath.replace("\\", "/"),
-    //                     caption: response.caption, 
-    //                     description: response.description, 
-    //                     date: response.date,
-    //                     absoluteImagePath: response.absoluteImagePath,
-    //                     meta: {
-    //                         type: "GET", 
-    //                         url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
-    //                     }
-    //                 }
-    //             })
-    //         })
-    //     .catch((error) => {
-    //         console.log(error);
-    //         res.status(500).json({
-    //             error: error
-    //         })
-    //     })
+        })
 })
 
 router.delete("/:gallery_item_id", function (req, res, next) {
