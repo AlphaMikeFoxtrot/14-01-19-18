@@ -24,8 +24,12 @@ const galleryItemSchema = mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     },
+    absoluteImagePath: {
+        type: String, 
+        required: true,
+    }
 
 })
 

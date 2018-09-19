@@ -2,13 +2,16 @@ const express = require("express")
 const router = express.Router();
 const multer = require("multer");
 const mongoose = require("mongoose")
+const fs = require("fs")
+require("dotenv/config");
+const d = Date.now();
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, "./galleryItems/");
     }, 
     filename: function(req, file, cb){
-        cb(null, file.originalname);
+        cb(null,  Date.now() + "-" + file.originalname);
         // cb(null, file.originalname)
     }
 })
@@ -35,7 +38,7 @@ const Branch = require("../models/branchModel");
 router.get("/", function (req, res, next) {
     GalleryItem
         .find()
-        .select("_id branch_id caption description date imagePath")
+        .select("_id branch_id caption description date imagePath absoluteImagePath")
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((docs) => {
@@ -43,14 +46,14 @@ router.get("/", function (req, res, next) {
                 count: docs.length, 
                 galleryItems: docs.map((doc) => {
                     return {
-                        _id: doc._id, 
-                        branch: doc.branch_id, 
+                        _id: doc._id,
+                        branch: doc.branch_id,
                         imagePath: doc.imagePath,
-                        caption: doc.caption, 
-                        description: doc.description, 
-                        date: doc.date, 
+                        caption: doc.caption,
+                        description: doc.description,
+                        date: doc.date,
                         meta: {
-                            type: "GET", 
+                            type: "GET",
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + doc._id,
                         }
                     }
@@ -67,7 +70,7 @@ router.get("/", function (req, res, next) {
 router.get("/:gallery_item_id", function (req, res, next) {
     GalleryItem
         .findById({ _id: req.params.gallery_item_id })
-        .select("_id branch_id caption description date imagePath")
+        .select("_id branch_id caption description date imagePath absoluteImagePath")
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((doc) => {
@@ -93,7 +96,6 @@ router.get("/:gallery_item_id", function (req, res, next) {
 });
 
 router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
-    console.log(req.file);
     Branch
         .findById({ _id: req.body.branch_id })
         .exec()
@@ -108,6 +110,7 @@ router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
                 branch_id: req.body.branch_id,
                 caption: req.body.caption,
                 description: req.body.description,
+                absoluteImagePath: req.file.path,
                 imagePath: "https://nameless-harbor-15056.herokuapp.com/api/v1/docs/" + req.file.path.replace("\\", "/").replace(/ /g, '_').replace("(", "-").replace(")", "-")
             })
             return galleryItem.save()
@@ -123,6 +126,7 @@ router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
                         caption: response.caption, 
                         description: response.description, 
                         date: response.date,
+                        absoluteImagePath: response.absoluteImagePath,
                         meta: {
                             type: "GET", 
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
@@ -139,21 +143,32 @@ router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
 })
 
 router.delete("/:gallery_item_id", function (req, res, next) {
+    const id = req.params.gallery_item_id;
     GalleryItem
-        .deleteOne({ _id: req.params.gallery_item_id })
+        .findById({ _id: id })
+        .select("absoluteImagePath")
         .exec()
+        .then((doc) => {
+            fs.unlink(doc.absoluteImagePath, (err) => {
+                if(err) {
+                    return res.status(500).json({
+                        message: "Something went wrong when deleting Gallery Item", 
+                        error: err
+                    })
+                }
+            })
+            return GalleryItem.deleteOne({
+                _id: id
+            });
+        })
         .then((response) => {
             res.status(200).json({
-                message: "Gallery Item successfully deleted ",
-                meta: {
-                    type: "POST", 
-                    description: "URL to add new Gallery Item", 
-                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems"
-                }
+                response: response
             })
         })
         .catch((error) => {
-            res.status(500).json({
+            res.status(404).json({
+                message: "Something went wrong when deleting Gallery Item", 
                 error: error
             })
         })

@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_ATL_PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`);
+mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_ATL_PSWD}@nasr-api-v1-k1kdi.mongodb.net/test?retryWrites=true`);
+// mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_ATL_PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`);
 // mongoose.connect("mongodb://mlab-nasr-admin:"+process.env.MLAB_PSWD+"@ds261332.mlab.com:61332/nasr-school-api-v1");
 
 app.use("/api/v1/events", eventsRoute);
@@ -40,5 +41,4 @@ app.use((error, req, res, next) => {
 
 app.listen(port, function() {
         console.log("listening on port " + port);
-        console.log(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.PSWD}@nasr-api-v1-yxyku.mongodb.net/test?retryWrites=true`)
-    })
+})
