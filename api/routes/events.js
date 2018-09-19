@@ -3,10 +3,12 @@ const router = epxress.Router();
 const mongoose = require("mongoose")
 
 const Event = require("../models/eventModel");
+const Branch = require("../models/branchModel")
 
 router.get("/", function(req, res, next) {
     Event
         .find()
+        .populate("branch_id", "_id location name type contact")
         .exec()
         .then((docs) => {
             res.status(200).json({
@@ -14,9 +16,12 @@ router.get("/", function(req, res, next) {
                 events: docs.map((doc) => {
                     return {
                         _id: doc._id, 
+                        branch: doc.branch_id,
                         title: doc.title, 
                         body: doc.body, 
-                        date: doc.date, 
+                        addedOn: doc.addedOn, 
+                        location: doc.location, 
+                        eventDate: doc.eventDate, 
                         meta: {
                             type: "GET", 
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + doc._id
@@ -36,15 +41,18 @@ router.get("/", function(req, res, next) {
 router.get("/:event_id", function (req, res, next) {
     const id = req.params.event_id
     Event
-        .findById(id)
-        .select("_id title body date")
+        .findById({ _id: id })
+        .populate("branch_id", "_id location name type contact")
         .exec()
         .then((doc) => {
             res.status(200).json({
                 _id: doc._id,
+                branch: doc.branch_id,
                 title: doc.title,
                 body: doc.body,
-                date: doc.date,
+                addedOn: doc.addedOn,
+                location: doc.location,
+                eventDate: doc.eventDate,
                 meta: {
                     type: "GET",
                     url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + doc._id
@@ -60,22 +68,39 @@ router.get("/:event_id", function (req, res, next) {
 });
 
 router.post("/", function(req, res, next) {
-    const event = new Event({
-        _id: new mongoose.Types.ObjectId(), 
-        title: req.body.title, 
-        body: req.body.body, 
-    })
-    event
-        .save()
+
+    const branch_id = req.body.branch_id;
+    Branch
+        .findById({ _id: branch_id })
+        .exec()
+        .then((doc) => {
+            if(!doc) {
+                return res.status(404).json({
+                    message: "invalid branch id"
+                })
+            }
+            const event = new Event({
+                _id: new mongoose.Types.ObjectId(),
+                branch_id: branch_id,
+                title: req.body.title,
+                body: req.body.body,
+                location: req.body.location,
+                eventDate: req.body.eventDate,
+            })
+            return event.save()
+        })
         .then((response) => {
             console.log(response);
             res.status(200).json({
                 message: "successfully uploaded new event", 
                 event: {
                     _id: response._id, 
+                    branch_id: branch_id,
                     title: response.title, 
                     body: response.body, 
-                    date: response.date,
+                    addedOn: response.addedOn, 
+                    location: response.location, 
+                    eventDate: response.eventDate, 
                     meta: {
                         type: "GET", 
                         description: "Get a list of all the events", 

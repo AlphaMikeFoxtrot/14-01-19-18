@@ -95,12 +95,12 @@ router.get("/:gallery_item_id", function (req, res, next) {
         })
 });
 
-router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
+router.post("/", upload.single("gallery_item_image"), function (req, res, next) {
     Branch
         .findById({ _id: req.body.branch_id })
         .exec()
         .then((doc) => {
-            if(!doc) {
+            if(!doc || req.body.branch_id.length < 24) {
                 return res.status(404).json({
                     message: "Invalid Branch ID",
                 })

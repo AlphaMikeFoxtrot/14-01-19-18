@@ -5,6 +5,11 @@ const eventSchema = mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId
     },
+    branch_id: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Branch", 
+        required: true, 
+    },
     title: {
         type: String,
         required: true
@@ -13,9 +18,17 @@ const eventSchema = mongoose.Schema({
         type: String, 
         required: true
     },
-    date: {
-        type: Date,
-        default: new Date().getTime()
+    eventDate: {
+        type: String, 
+        required: true,
+    },
+    location: {
+        type: String, 
+        required: true, 
+    },
+    addedOn: {
+        type: String,
+        default: `${new Date().getDay()}/${new Date().getMonth()}/${new Date().getFullYear()} at ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
     },
 
 })
