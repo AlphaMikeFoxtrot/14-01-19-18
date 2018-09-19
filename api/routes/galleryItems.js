@@ -8,7 +8,7 @@ const d = Date.now();
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "./galleryItems/");
+        cb(null, "../../galleryItems/");
     }, 
     filename: function(req, file, cb){
         cb(null,  Date.now() + "-" + file.originalname);
