@@ -10,6 +10,14 @@ const notificationsRoute = require("./api/routes/notifications");
 const branchRoute = require("./api/routes/branch");
 const galleryRoute = require("./api/routes/gallery");
 
+app.use((req, res, next) => {
+    res.append('Access-Control-Allow-Origin', '*');
+    res.append('Access-Control-Allow-Methods', '*');
+    res.append("Access-Control-Allow-Headers", "Origin, Accept,Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    res.append('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
