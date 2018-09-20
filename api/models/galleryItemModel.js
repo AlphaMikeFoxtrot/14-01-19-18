@@ -10,10 +10,6 @@ const galleryItemSchema = mongoose.Schema({
         ref: "Branch", 
         required: true,
     },
-    imagePath: {
-        type: String, 
-        required: true,
-    },
     caption: {
         type: String, 
         required: true, 
@@ -26,9 +22,9 @@ const galleryItemSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    absoluteImagePath: {
-        type: String, 
-        required: true,
+    imageUrl: {
+        type: mongoose.Schema.Types.Mixed, 
+        required: true, 
     }
 
 })

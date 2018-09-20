@@ -179,7 +179,7 @@ router.get("/:gallery_item_id", function (req, res, next) {
 //     //     })
 // })
 
-router.post("/", upload.single("galleryItemImage"), function (req, res, next) {
+router.post("/", upload.single("gallery_item_image"), function (req, res, next) {
     console.log(req.file);
     Branch
         .findById({ _id: req.body.branch_id })
