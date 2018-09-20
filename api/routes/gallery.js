@@ -46,7 +46,7 @@ const upload = multer({
 router.get("/", function (req, res, next) {
     GalleryItem
         .find()
-        .select("_id branch_id caption description date imageUrl")
+        .select("_id branch_id caption description date imageUrl imageId")
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((docs) => {
@@ -60,6 +60,7 @@ router.get("/", function (req, res, next) {
                         description: doc.description,
                         date: doc.date,
                         imageUrl: doc.imageUrl,
+                        imageId: doc.imageId,
                         meta: {
                             type: "GET",
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + doc._id,
@@ -78,7 +79,7 @@ router.get("/", function (req, res, next) {
 router.get("/:gallery_item_id", function (req, res, next) {
     GalleryItem
         .findById({ _id: req.params.gallery_item_id })
-        .select("_id branch_id caption description date imageUrl")
+        .select("_id branch_id caption description date imageUrl imageId")
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((doc) => {
@@ -94,6 +95,7 @@ router.get("/:gallery_item_id", function (req, res, next) {
                 description: doc.description, 
                 date: doc.date, 
                 imageUrl: doc.imageUrl,
+                imageId: doc.imageId,
                 meta: {
                     type: "GET", 
                     description: "GET request for all the gallery items", 
@@ -118,7 +120,8 @@ router.post("/", upload.single("gallery_item_image"), function (req, res, next) 
                 branch_id: req.body.branch_id,
                 caption: req.body.caption,
                 description: req.body.description,
-                imageUrl: "https://nameless-harbor-15056.herokuapp.com/api/v1/gallery/images/" + req.file.filename
+                imageUrl: "https://nameless-harbor-15056.herokuapp.com/api/v1/gallery/images/" + req.file.filename,
+                imageId: req.file.id,
             })
             return galleryItem.save()
         })
@@ -133,6 +136,7 @@ router.post("/", upload.single("gallery_item_image"), function (req, res, next) 
                         description: response.description, 
                         date: response.date,
                         imageUrl: response.imageUrl,
+                        imageId: response.imageId,
                         meta: {
                             type: "GET", 
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
@@ -148,33 +152,27 @@ router.post("/", upload.single("gallery_item_image"), function (req, res, next) 
         })
 })
 
-router.delete("/:gallery_item_id", function (req, res, next) {
-    const id = req.params.gallery_item_id;
+router.delete("/:itemId/:imageId", function (req, res, next) {
+    const imageId = req.params.imageId
+    const itemId = req.params.itemId
     GalleryItem
-        .findById({ _id: id })
-        .select("absoluteImagePath")
-        .exec()
-        .then((doc) => {
-            fs.unlink(doc.absoluteImagePath, (err) => {
-                if(err) {
+        .deleteOne({ _id: itemId })
+        .then((response) => {
+            gfs.remove({_id: imageId, root: "galleryImage"}, function (err, gridStore) {
+                if (err) {
                     return res.status(500).json({
-                        message: "Something went wrong when deleting Gallery Item", 
+                        message: "could\'nt delete the image", 
                         error: err
                     })
                 }
-            })
-            return GalleryItem.deleteOne({
-                _id: id
+                res.status(200).json({
+                    message: "gallery item sucessfully deleted"
+                })
             });
         })
-        .then((response) => {
-            res.status(200).json({
-                response: response
-            })
-        })
         .catch((error) => {
-            res.status(404).json({
-                message: "Something went wrong when deleting Gallery Item", 
+            res.status(500).json({
+                message: "could\'nt delte the gallery item", 
                 error: error
             })
         })

@@ -25,6 +25,10 @@ const galleryItemSchema = mongoose.Schema({
     imageUrl: {
         type: mongoose.Schema.Types.Mixed, 
         required: true, 
+    },
+    imageId: {
+        type: mongoose.Schema.Types.Mixed, 
+        required: true, 
     }
 
 })
