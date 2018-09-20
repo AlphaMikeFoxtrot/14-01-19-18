@@ -5,11 +5,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const eventsRoute = require("./api/routes/events");
-const galleryItemsRoute = require("./api/routes/galleryItems");
 const notificationsRoute = require("./api/routes/notifications");
 const branchRoute = require("./api/routes/branch");
 const galleryRoute = require("./api/routes/gallery");
-const galleryItemsRoute2 = require("./api/routes/galleryItems2")
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
@@ -26,11 +24,9 @@ mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_AT
 // mongoose.connect("mongodb://mlab-nasr-admin:"+process.env.MLAB_PSWD+"@ds261332.mlab.com:61332/nasr-school-api-v1");
 
 app.use("/api/v1/events", eventsRoute);
-app.use("/api/v1/galleryItems", galleryItemsRoute);
 app.use("/api/v1/notifications", notificationsRoute);
 app.use("/api/v1/branch", branchRoute);
 app.use("/api/v1/gallery", galleryRoute);
-app.use("/api/v1/galleryItems2", galleryItemsRoute2);
 
 app.use("/api/v1/docs/galleryItems", express.static("galleryItems"));
 app.use(express.static("public"));

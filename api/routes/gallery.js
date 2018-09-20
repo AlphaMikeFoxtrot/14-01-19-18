@@ -148,6 +148,38 @@ router.post("/", upload.single("gallery_item_image"), function (req, res, next) 
         })
 })
 
+router.delete("/:gallery_item_id", function (req, res, next) {
+    const id = req.params.gallery_item_id;
+    GalleryItem
+        .findById({ _id: id })
+        .select("absoluteImagePath")
+        .exec()
+        .then((doc) => {
+            fs.unlink(doc.absoluteImagePath, (err) => {
+                if(err) {
+                    return res.status(500).json({
+                        message: "Something went wrong when deleting Gallery Item", 
+                        error: err
+                    })
+                }
+            })
+            return GalleryItem.deleteOne({
+                _id: id
+            });
+        })
+        .then((response) => {
+            res.status(200).json({
+                response: response
+            })
+        })
+        .catch((error) => {
+            res.status(404).json({
+                message: "Something went wrong when deleting Gallery Item", 
+                error: error
+            })
+        })
+});
+
 router.get("/images/:filename", function(req, res, next) {
     gfs.files.findOne({ filename: req.params.filename}, (err, file) => {
         if(!file || file.length === 0) {
