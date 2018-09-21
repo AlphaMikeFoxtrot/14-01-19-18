@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const mongoose = require("mongoose")
-// const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
 const User = require("../models/userModel")
@@ -17,7 +17,7 @@ router.post("/signup", (req, res, next) => {
                     message: "Mail exists"
                 });
             } else {
-                require("bcrypt").hash(req.body.password, 10, (err, hash) => {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
                         return res.status(500).json({
                             error: err
@@ -49,7 +49,6 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post("/signin", function(req, res, next) {
-    const bcrypt = require("bcrypt")
     User
         .find({ username: req.body.username })
         .exec()
