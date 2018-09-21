@@ -49,6 +49,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post("/signin", function(req, res, next) {
+    const bcrypt = require("bcrypt")
     User
         .find({ username: req.body.username })
         .exec()
@@ -58,7 +59,7 @@ router.post("/signin", function(req, res, next) {
                     message: "Auth Fail"
                 })
             }
-            require("bcrypt").compare(req.body.password, user[0].password, (err, result) => {
+            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if(err) {
                     return res.status(401).json({
                         message: "Auth Fail"
