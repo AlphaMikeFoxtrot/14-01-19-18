@@ -9,6 +9,7 @@ const eventsRoute = require("./api/routes/events");
 const notificationsRoute = require("./api/routes/notifications");
 const branchRoute = require("./api/routes/branch");
 const galleryRoute = require("./api/routes/gallery");
+const userRoute = require("./api/routes/user")
 
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', '*');
@@ -36,6 +37,7 @@ app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/notifications", notificationsRoute);
 app.use("/api/v1/branch", branchRoute);
 app.use("/api/v1/gallery", galleryRoute);
+app.use("/api/v1/user", userRoute);
 
 app.use("/api/v1/docs/galleryItems", express.static("galleryItems"));
 app.use(express.static("public"));
