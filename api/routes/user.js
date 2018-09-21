@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const mongoose = require("mongoose")
-const bcrypt = require("bcrypt")
+// const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
 const User = require("../models/userModel")
@@ -17,7 +17,7 @@ router.post("/signup", (req, res, next) => {
                     message: "Mail exists"
                 });
             } else {
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                require("bcrypt").hash(req.body.password, 10, (err, hash) => {
                     if (err) {
                         return res.status(500).json({
                             error: err
@@ -58,7 +58,7 @@ router.post("/signin", function(req, res, next) {
                     message: "Auth Fail"
                 })
             }
-            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+            require("bcrypt").compare(req.body.password, user[0].password, (err, result) => {
                 if(err) {
                     return res.status(401).json({
                         message: "Auth Fail"
