@@ -2,10 +2,12 @@ const epxress = require('express')
 const router = epxress.Router();
 const mongoose = require("mongoose")
 
+const checkAuth = require("../middleware/checkAuth")
+
 const Event = require("../models/eventModel");
 const Branch = require("../models/branchModel")
 
-router.get("/", function(req, res, next) {
+router.get("/", checkAuth, function (req, res, next) {
     Event
         .find()
         .populate("branch_id", "_id location name type contact")
@@ -38,7 +40,7 @@ router.get("/", function(req, res, next) {
         })
 });
 
-router.get("/:event_id", function (req, res, next) {
+router.get("/:event_id", checkAuth, function (req, res, next) {
     const id = req.params.event_id
     Event
         .findById({ _id: id })
@@ -67,7 +69,7 @@ router.get("/:event_id", function (req, res, next) {
         })
 });
 
-router.post("/", function(req, res, next) {
+router.post("/", checkAuth, function (req, res, next) {
 
     const branch_id = req.body.branch_id;
     Branch
@@ -118,7 +120,7 @@ router.post("/", function(req, res, next) {
         })
 })
 
-router.patch("/:event_id", function (req, res, next) {
+router.patch("/:event_id", checkAuth, function (req, res, next) {
     const id = req.params.event_id;
     const updateOps = {}
     for (const ops of req.body) {
@@ -143,7 +145,7 @@ router.patch("/:event_id", function (req, res, next) {
         })
 });
 
-router.delete("/:event_id", function (req, res, next) {
+router.delete("/:event_id", checkAuth, function (req, res, next) {
     const id = req.params.event_id;
     Event.remove({ _id: id }).exec()
         .then((response) => {

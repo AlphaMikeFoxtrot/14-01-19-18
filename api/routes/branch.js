@@ -2,9 +2,11 @@ const express = require("express")
 const router = express.Router();
 const mongoose = require("mongoose")
 
+const checkAuth = require("../middleware/checkAuth")
+
 const Branch = require("../models/branchModel")
 
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
     Branch
         .find()
         .exec()
@@ -18,7 +20,7 @@ router.get("/", (req, res, next) => {
         })
 })
 
-router.post("/", (req, res, next) => {
+router.post("/", checkAuth, (req, res, next) => {
     const branch = new Branch({
         _id: new mongoose.Types.ObjectId(),
         location: req.body.location, 
@@ -40,7 +42,7 @@ router.post("/", (req, res, next) => {
         })
 })
 
-router.delete("/:branch_id", (req, res, next) => {
+router.delete("/:branch_id", checkAuth, (req, res, next) => {
     const id = req.params.branch_id;
     Branch
         .remove({_id: id})

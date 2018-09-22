@@ -8,7 +8,7 @@ const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const methodOverride = require("method-override");
 const bodyParser = require("body-parser");
-const GalleryItem = require("../models/galleryItemModel")
+const ExamTimeTable = require("../models/examTimeTableModel")
 const Branch = require("../models/branchModel")
 const checkAuth = require("../middleware/checkAuth")
 
@@ -19,7 +19,7 @@ const conn = mongoose.createConnection(mongoURI);
 let gfs;
 conn.once('open', function () {
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection("galleryImages")
+    gfs.collection("examTimeTables")
 })
 
 const storage = new GridFsStorage({
@@ -33,7 +33,7 @@ const storage = new GridFsStorage({
                 const filename = buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'galleryImages'
+                    bucketName: 'examTimeTables'
                 };
                 resolve(fileInfo);
             });
@@ -45,7 +45,7 @@ const upload = multer({
 });
 
 router.get("/", checkAuth, function (req, res, next) {
-    GalleryItem
+    ExamTimeTable
         .find()
         .select("_id branch_id caption description date imageUrl imageId")
         .populate("branch_id", "_id location name type contact")
@@ -53,7 +53,7 @@ router.get("/", checkAuth, function (req, res, next) {
         .then((docs) => {
             res.status(200).json({
                 count: docs.length,
-                galleryItems: docs.map((doc) => {
+                examTimeTables: docs.map((doc) => {
                     return {
                         _id: doc._id,
                         branch: doc.branch_id,
@@ -64,7 +64,7 @@ router.get("/", checkAuth, function (req, res, next) {
                         imageId: doc.imageId,
                         meta: {
                             type: "GET",
-                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + doc._id,
+                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/exam/" + doc._id,
                         }
                     }
                 })
@@ -77,16 +77,16 @@ router.get("/", checkAuth, function (req, res, next) {
         })
 });
 
-router.get("/:gallery_item_id", checkAuth, function (req, res, next) {
-    GalleryItem
-        .findById({ _id: req.params.gallery_item_id })
+router.get("/:exam_time_table_id", checkAuth, function (req, res, next) {
+    ExamTimeTable
+        .findById({ _id: req.params.exam_time_table_id })
         .select("_id branch_id caption description date imageUrl imageId")
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((doc) => {
             if(!doc) {
                 return res.status(404).json({
-                    message: "Gallery Item not found in the database"
+                    message: "Exam Time Table not found in the database"
                 })
             }
             res.status(200).json({
@@ -99,14 +99,14 @@ router.get("/:gallery_item_id", checkAuth, function (req, res, next) {
                 imageId: doc.imageId,
                 meta: {
                     type: "GET", 
-                    description: "GET request for all the gallery items", 
-                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems"
+                    description: "GET request for all the exam time tables", 
+                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/exam"
                 }
             })
         })
 });
 
-router.post("/", checkAuth, upload.single("gallery_item_image"), function (req, res, next) {
+router.post("/", checkAuth, upload.single("exam_time_table_image"), function (req, res, next) {
     Branch
         .findById({ _id: req.body.branch_id })
         .exec()
@@ -116,21 +116,21 @@ router.post("/", checkAuth, upload.single("gallery_item_image"), function (req, 
                     message: "Invalid Branch ID",
                 })
             }
-            galleryItem = new GalleryItem({
+            examTimeTable = new ExamTimeTable({
                 _id: mongoose.Types.ObjectId(),
                 branch_id: req.body.branch_id,
                 caption: req.body.caption,
                 description: req.body.description,
-                imageUrl: "https://nameless-harbor-15056.herokuapp.com/api/v1/gallery/images/" + req.file.filename,
+                imageUrl: "https://nameless-harbor-15056.herokuapp.com/api/v1/exam/images/" + req.file.filename,
                 imageId: req.file.id,
             })
-            return galleryItem.save()
+            return examTimeTable.save()
         })
         .then((response) => {
                 console.log(response);
                 res.status(201).json({
-                    message: "Gallery item successfully added to the database",
-                    galleryItem: {
+                    message: "Exam Time Table successfully added to the database",
+                    examTimeTable: {
                         _id: response._id, 
                         branch_id: response.branch_id, 
                         caption: response.caption, 
@@ -140,7 +140,7 @@ router.post("/", checkAuth, upload.single("gallery_item_image"), function (req, 
                         imageId: response.imageId,
                         meta: {
                             type: "GET", 
-                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/galleryItems/" + response._id,
+                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/exam/" + response._id,
                         }
                     }
                 })
@@ -155,11 +155,11 @@ router.post("/", checkAuth, upload.single("gallery_item_image"), function (req, 
 
 router.delete("/:itemId/:imageId", checkAuth, function (req, res, next) {
     const imageId = req.params.imageId
-    const itemId = req.params.itemIds
-    GalleryItem
+    const itemId = req.params.itemId
+    ExamTimeTable
         .deleteOne({ _id: itemId })
         .then((response) => {
-            gfs.remove({_id: imageId, root: "galleryImage"}, function (err, gridStore) {
+            gfs.remove({_id: imageId, root: "examTimeTables"}, function (err, gridStore) {
                 if (err) {
                     return res.status(500).json({
                         message: "could\'nt delete the image", 
@@ -167,13 +167,13 @@ router.delete("/:itemId/:imageId", checkAuth, function (req, res, next) {
                     })
                 }
                 res.status(200).json({
-                    message: "gallery item sucessfully deleted"
+                    message: "exam time table sucessfully deleted"
                 })
             });
         })
         .catch((error) => {
             res.status(500).json({
-                message: "could\'nt delte the gallery item", 
+                message: "could\'nt delte the exam time table", 
                 error: error
             })
         })
