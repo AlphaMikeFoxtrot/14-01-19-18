@@ -2,6 +2,7 @@ const express = require('express')
 const app = express();
 const port = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
+const morgan = require("morgan")
 const mongoose = require("mongoose");
 require("dotenv").config()
 
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(morgan("combined"))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
