@@ -14,8 +14,8 @@ const notificationSchema = mongoose.Schema({
         required: true
     },
     date: {
-        type: Date,
-        default: Date.now
+        type: String,
+        default: `${new Date().getDay()}/${new Date().getMonth()}/${new Date().getFullYear()} at ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`
     },
 
 })

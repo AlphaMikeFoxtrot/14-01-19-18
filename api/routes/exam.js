@@ -179,7 +179,7 @@ router.delete("/:itemId/:imageId", checkAuth, function (req, res, next) {
         })
 });
 
-router.get("/images/:filename", function (req, res, next) {
+router.get("/images/:filename", checkAuth, function (req, res, next) {
     gfs.files.findOne({ filename: req.params.filename}, (err, file) => {
         if(!file || file.length === 0) {
             return res.status(404).json({
