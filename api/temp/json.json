@@ -1,48 +1,42 @@
 {
-    "_id": {
-        "$oid": "5ba748048e35d0138084b71b"
-    },
-    "location": "No. 1-72-4/4, Survey No. 47, Serilingampally, Gachi Bowli, Hyderabad, Telangana 500032",
-    "name": "NASR School Boys",
-    "type": "boys",
-    "contact": "040 2300 1833",
-    "__v": {
-        "$numberInt": "0"
-    },
-    {
-        "_id": {
-            "$oid": "5ba7482d8e35d0138084b71c"
+    "count": 2,
+    "events": [{
+            "_id": "5ba7d0098baa30000490bf3d",
+            "branch": {
+                "_id": "5ba7cf5a8baa30000490bf37",
+                "location": "No. 1-72-4/4, Survey No. 47, Serilingampally, Gachi Bowli, Hyderabad, Telangana 500032",
+                "name": "NASR School Boys",
+                "type": "boys",
+                "contact": "040 2300 1833"
+            },
+            "title": "Annual Day",
+            "body": "NASR School Annual Day for the year 2018-19",
+            "addedOn": "0/8/2018 at 17:34:58",
+            "location": "Red Fort, Jubilee hIllss",
+            "eventDate": "13/12/2018 at 12:00:00pm",
+            "meta": {
+                "type": "GET",
+                "url": "https://nameless-harbor-15056.herokuapp.com/api/v1/events/5ba7d0098baa30000490bf3d"
+            }
         },
-        "location": "6-2-905, Khairatabad, Lane Opposite Icici Bank, Hyderabad, Telangana 500004",
-        "name": "NASR School",
-        "type": "Co-Ed",
-        "contact": "040 2330 7555",
-        "__v": {
-            "$numberInt": "0"
+        {
+            "_id": "5ba7d04c8baa30000490bf3e",
+            "branch": {
+                "_id": "5ba7cf5a8baa30000490bf37",
+                "location": "No. 1-72-4/4, Survey No. 47, Serilingampally, Gachi Bowli, Hyderabad, Telangana 500032",
+                "name": "NASR School Boys",
+                "type": "boys",
+                "contact": "040 2300 1833"
+            },
+            "title": "Inter School Chess Competition",
+            "body": "NASR School inter-school chess competition for the year 2018-19",
+            "addedOn": "0/8/2018 at 17:34:58",
+            "location": "Aga Khan Academy, Shamsabad",
+            "eventDate": "13/05/2018 at 08:00:00am",
+            "meta": {
+                "type": "GET",
+                "url": "https://nameless-harbor-15056.herokuapp.com/api/v1/events/5ba7d04c8baa30000490bf3e"
+            }
         }
-    },
-    {
-        "_id": {
-            "$oid": "5ba748818e35d0138084b71d"
-        },
-        "location": "Somajiguda, Hyderabad, Telangana 500041",
-        "name": "Nasr Pre Primary",
-        "type": "Pre Primary",
-        "contact": "040 2331 1526",
-        "__v": {
-            "$numberInt": "0"
-        }
-    },
-    {
-        "_id": {
-            "$oid": "5ba748a18e35d0138084b71e"
-        },
-        "location": "505, Road Number 24, Venkatagiri, Jubilee Hills, Hyderabad, Telangana 500033",
-        "name": "Nasr Pre Primary Jubilee Hills",
-        "type": "Pre Primary",
-        "contact": "NA",
-        "__v": {
-            "$numberInt": "0"
-        }
-    }
+    ]
 }
