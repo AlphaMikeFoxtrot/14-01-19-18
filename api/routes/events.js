@@ -91,7 +91,7 @@ router.post("/", checkAuth, function (req, res, next) {
                 title: req.body.title,
                 body: req.body.body,
                 location: req.body.location,
-                eventDate: req.body.eventDate,
+                eventDate: req.body.event_date,
             })
             return event.save()
         })
