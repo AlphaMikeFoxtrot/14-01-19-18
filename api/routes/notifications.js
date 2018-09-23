@@ -25,7 +25,6 @@ router.get("/", checkAuth, function (req, res, next) {
                         meta: {
                             type: "GET", 
                             url: "https://nameless-harbor-15056.herokuapp.com/api/v1/notifications/" + doc._id,
-                            l_url: "localhost:8080/api/v1/notifications/" + doc._id
                         }
                     }
                 })
@@ -40,9 +39,14 @@ router.get("/:notification_id", checkAuth, function (req, res, next) {
         .then((doc) => {
             res.status(200).json({
                 _id: doc._id,
-                    title: doc.title,
-                    body: doc.body,
-                    date: doc.date,
+                title: doc.title,
+                body: doc.body,
+                date: doc.date,
+                meta: {
+                    type: "GET", 
+                    description: "get all notifications", 
+                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/notifications"
+                }
             })
         })
 });
