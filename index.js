@@ -37,7 +37,7 @@ mongoose.connect(`mongodb+srv://${process.env.MON_ATL_URME}:${process.env.MON_AT
 app.use("/api/v1/events", eventsRoute);
 app.use("/api/v1/notifications", notificationsRoute);
 app.use("/api/v1/branch", branchRoute);
-app.use("/api/v1/gallery", galleryRoute);
+app.use("/api/v1/gallery", galleryRoute);   
 app.use("/api/v1/exam", examRoute);
 app.use("/api/v1/user", userRoute);
 
