@@ -19,6 +19,7 @@ router.post("/signup", (req, res, next) => {
             } else {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
+                        console.log(err)
                         return res.status(500).json({
                             error: err
                         });
@@ -26,7 +27,8 @@ router.post("/signup", (req, res, next) => {
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
                             username: req.body.username,
-                            password: hash
+                            password: hash,
+                            notificationToken: req.body.notificationToken,
                         });
                         user
                             .save()
@@ -37,7 +39,7 @@ router.post("/signup", (req, res, next) => {
                                 });
                             })
                             .catch(err => {
-                                console.log(err);
+                                console.log(err)
                                 res.status(500).json({
                                     error: err
                                 });
@@ -60,6 +62,7 @@ router.post("/signin", function(req, res, next) {
             }
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if(err) {
+                    console.log(err)
                     return res.status(401).json({
                         message: "Auth Fail"
                     })
@@ -104,7 +107,7 @@ router.delete("/:userId", (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            console.log(err)
             res.status(500).json({
                 error: err
             });

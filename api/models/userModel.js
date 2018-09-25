@@ -6,6 +6,10 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         required: true,
     },
+    notificationToken: {
+        type: String, 
+        required: true, 
+    },
     username: {
         type: String, 
         required: true, 
