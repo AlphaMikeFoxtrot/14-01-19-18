@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     },
     notificationToken: {
         type: String, 
-        required: true, 
+        required: false,
     },
     username: {
         type: String, 
