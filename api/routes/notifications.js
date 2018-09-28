@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router();
 const mongoose = require("mongoose")
 const checkAuth = require("../middleware/checkAuth")
+const axios = require("axios")
 
 const Notification = require("../models/notificationModel");
 
@@ -105,6 +106,33 @@ router.post("/", checkAuth, function(req, res, next) {
                 error: error
             })
         })
+})
+
+router.post("/test", function(req, res, next) {
+    const token = req.body.token;
+    const message = {
+        "to": token, 
+        "body": "al;kdjflkajdflj aflkjasdf lkjf asdlfjl asjflajf"
+    }
+    axios({
+        method: 'POST',
+        url: 'https://exp.host/--/api/v2/push/send',
+        headers: {
+            "Accept": "Application/json",
+            "Content-Type": "Application/json"
+        },
+        body: "{\r\n        \"to\": token, \r\n        \"body\": \"al;kdjflkajdflj aflkjasdf lkjf asdlfjl asjflajf\"\r\n    }"
+    }).then((response) => {
+        res.status(200).json({
+            response: response
+        })
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({
+            error: error
+        })
+    })
+
 })
 
 module.exports = router;
