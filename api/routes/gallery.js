@@ -44,9 +44,9 @@ const upload = multer({
     storage
 });
 
-router.get("/", checkAuth, function (req, res, next) {
+router.get("/:branchId", checkAuth, function (req, res, next) {
     GalleryItem
-        .find()
+        .find({branch_id: req.params.branchId})
         .select("_id branch_id caption description date imageUrl imageId")
         .populate("branch_id", "_id location name type contact")
         .exec()
