@@ -44,13 +44,21 @@ const upload = multer({
     storage
 });
 
-router.get("/", checkAuth, function (req, res, next) {
+router.get("/:branch_id", checkAuth, function (req, res, next) {
     ExamTimeTable
-        .find()
+        .find({
+            branch_id: req.params.branch_id
+        })
         .select("_id branch_id caption description date imageUrl imageId")
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((docs) => {
+            if(docs.length < 1 || docs === null) {
+                res.status(404).json({
+                    message: "No exam time table found for the specific branch"
+                })
+                return;
+            }
             res.status(200).json({
                 count: docs.length,
                 examTimeTables: docs.map((doc) => {
