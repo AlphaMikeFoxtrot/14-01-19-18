@@ -62,42 +62,17 @@ router.post("/", checkAuth, function(req, res, next) {
     notification
         .save()
         .then((response) => {
-                const message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                    to: '/topics/all',
-                    collapse_key: '229626601465',
-
-                    notification: {
-                        title: req.body.title,
-                        body: req.body.notificationBody
-                    },
-
-                    data: { //you can send only notification or only data(or include both)
-                        notificationd_id: response._id, 
-                    }
-                };
-
-                fcm.send(message, function (err, result) {
-                    if (err) {
-                        console.log("Something has gone wrong!");
-                        res.status(500).json({
-                            message: "error sending",
-                            error: err
-                        })
-                    } else {
-                        console.log("Successfully sent with response: ", response);
-                        res.status(200).json({
-                            message: "notification successfully sent", 
-                            response: result,
-                            notification: {
-                                _id: response._id, 
-                                title: response.title, 
-                                body: response.body, 
-                                date: response.date
-                            }
-                        })
-                    }
-                });
-
+            console.log("Successfully sent with response: ", response);
+            res.status(200).json({
+                message: "notification saved successfully", 
+                response: result,
+                notification: {
+                    _id: response._id, 
+                    title: response.title, 
+                    body: response.body, 
+                    date: response.date
+                }
+            })
         })
         .catch((error) => {
             console.log(error)
@@ -106,33 +81,6 @@ router.post("/", checkAuth, function(req, res, next) {
                 error: error
             })
         })
-})
-
-router.post("/test", function(req, res, next) {
-    const token = req.body.token;
-    const message = {
-        "to": token, 
-        "body": "al;kdjflkajdflj aflkjasdf lkjf asdlfjl asjflajf"
-    }
-    axios({
-        method: 'POST',
-        url: 'https://exp.host/--/api/v2/push/send',
-        headers: {
-            "Accept": "Application/json",
-            "Content-Type": "Application/json"
-        },
-        body: "{\r\n        \"to\": token, \r\n        \"body\": \"al;kdjflkajdflj aflkjasdf lkjf asdlfjl asjflajf\"\r\n    }"
-    }).then((response) => {
-        res.status(200).json({
-            response: response
-        })
-    }).catch((error) => {
-        console.log(error);
-        res.status(500).json({
-            error: error
-        })
-    })
-
 })
 
 module.exports = router;

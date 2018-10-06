@@ -38,7 +38,7 @@ router.get("/:branch_id", checkAuth, function (req, res, next) {
                         eventDate: doc.eventDate, 
                         meta: {
                             type: "GET", 
-                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + doc._id
+                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/single/" + doc._id
                         }
                     }
                 })
@@ -69,7 +69,7 @@ router.get("/single/:event_id", checkAuth, function (req, res, next) {
                 eventDate: doc.eventDate,
                 meta: {
                     type: "GET",
-                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + doc._id
+                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/single/" + doc._id
                 }
             })
         })
@@ -104,48 +104,24 @@ router.post("/", checkAuth, function (req, res, next) {
             return event.save()
         })
         .then((response) => {
-            const message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                to: '/topics/all',
-                collapse_key: '229626601465',
-
-                notification: {
-                    title: req.body.title,
-                    body: req.body.body
-                },
-
-                data: { //you can send only notification or only data(or include both)
-                    notificationd_id: response._id,
-                }
-            };
-
-            fcm.send(message, function (err, result) {
-                if (err) {
-                    console.log("Something has gone wrong!");
-                    res.status(500).json({
-                        message: "error sending",
-                        error: err
-                    })
-                } else {
-                    console.log(response);
-                    res.status(200).json({
-                        message: "successfully uploaded new event",
-                        event: {
-                            _id: response._id,
-                            branch_id: branch_id,
-                            title: response.title,
-                            body: response.body,
-                            addedOn: response.addedOn,
-                            location: response.location,
-                            eventDate: response.eventDate,
-                            meta: {
-                                type: "GET",
-                                description: "Get a list of all the events",
-                                url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events"
-                            }
+		console.log(response);
+                res.status(200).json({
+                    message: "successfully uploaded new event",
+                    event: {
+                        _id: response._id,
+                        branch_id: branch_id,
+			title: response.title,
+                        body: response.body,
+                        addedOn: response.addedOn,
+                        location: response.location,
+                        eventDate: response.eventDate,
+                        meta: {
+                            type: "GET",
+                            description: "Get a list of all the events",
+                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events"
                         }
-                    })
-                }
-            });
+                    }
+                })
         })
         .catch((error) => { 
             console.log(error);

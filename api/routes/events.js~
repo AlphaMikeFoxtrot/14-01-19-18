@@ -38,7 +38,7 @@ router.get("/:branch_id", checkAuth, function (req, res, next) {
                         eventDate: doc.eventDate, 
                         meta: {
                             type: "GET", 
-                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + doc._id
+                            url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/single/" + doc._id
                         }
                     }
                 })
@@ -52,7 +52,7 @@ router.get("/:branch_id", checkAuth, function (req, res, next) {
         })
 });
 
-router.get("/:event_id", checkAuth, function (req, res, next) {
+router.get("/single/:event_id", checkAuth, function (req, res, next) {
     const id = req.params.event_id
     Event
         .findById({ _id: id })
@@ -69,7 +69,7 @@ router.get("/:event_id", checkAuth, function (req, res, next) {
                 eventDate: doc.eventDate,
                 meta: {
                     type: "GET",
-                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/" + doc._id
+                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/events/single/" + doc._id
                 }
             })
         })
