@@ -33,6 +33,28 @@ router.get("/", checkAuth, function (req, res, next) {
         })
 });
 
+router.delete("/:notification_id", function(req, res, next) {
+    Notification
+        .deleteOne({ _id: req.params.notification_id })
+        .then((response) => {
+            console.log(response);
+            res.status(200).json({
+                message: "notification successfully deleted", 
+                meta: {
+                    type: "GET", 
+                    description: "Get all the notifications", 
+                    url: "https://nameless-harbor-15056.herokuapp.com/api/v1/notifications"
+                }
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json({
+                error
+            })
+        })
+})
+
 router.get("/:notification_id", checkAuth, function (req, res, next) {
     Notification
         .findById({_id: req.params.notification_id})
@@ -62,10 +84,8 @@ router.post("/", checkAuth, function(req, res, next) {
     notification
         .save()
         .then((response) => {
-            console.log("Successfully sent with response: ", response);
             res.status(200).json({
                 message: "notification saved successfully", 
-                response: result,
                 notification: {
                     _id: response._id, 
                     title: response.title, 
