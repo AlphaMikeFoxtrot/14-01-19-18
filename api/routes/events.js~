@@ -52,7 +52,7 @@ router.get("/:branch_id", checkAuth, function (req, res, next) {
         })
 });
 
-router.get("/single/:event_id", checkAuth, function (req, res, next) {
+router.get("/:event_id", checkAuth, function (req, res, next) {
     const id = req.params.event_id
     Event
         .findById({ _id: id })
