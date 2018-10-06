@@ -11,9 +11,17 @@ const checkAuth = require("../middleware/checkAuth")
 const Event = require("../models/eventModel");
 const Branch = require("../models/branchModel")
 
-router.get("/", checkAuth, function (req, res, next) {
+router.get("/:branch_id", checkAuth, function (req, res, next) {
+
+    if (!mongoose.Types.ObjectId.isValid(req.params.branch_id)) {
+        res.status(404).json({
+            message: "Invalid Branch ID"
+        })
+        return;
+    }
+
     Event
-        .find()
+        .find({ branch_id: req.params.branch_id })
         .populate("branch_id", "_id location name type contact")
         .exec()
         .then((docs) => {
