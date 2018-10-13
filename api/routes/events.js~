@@ -112,6 +112,7 @@ router.post("/", checkAuth, function (req, res, next) {
                         branch_id: branch_id,
 			title: response.title,
                         body: response.body,
+                        addedOn: response.addedOn,
                         location: response.location,
                         eventDate: response.eventDate,
                         meta: {
