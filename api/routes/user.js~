@@ -6,9 +6,7 @@ const jwt = require("jsonwebtoken")
 
 const User = require("../models/userModel")
 
-const checkAuth = require("../middleware/checkAuth")
-
-router.get("/", checkAuth, (req, res, next) => {
+router.get("/", checkAuth(), (req, res, next) => {
     User
         .find({})
         .exec()
