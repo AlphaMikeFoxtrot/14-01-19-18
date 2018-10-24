@@ -108,8 +108,8 @@ router.get("/:gallery_item_id", checkAuth, function (req, res, next) {
 });
 
 router.post("/", checkAuth, upload.single("gallery_item_image"), function (req, res, next) {
-//    logger.info(req.file);//this will be automatically set by multer
-//    logger.info(req.body);
+    logger.info(req.file);//this will be automatically set by multer
+    logger.info(req.body);
     Branch
         .findById({ _id: req.body.branch_id })
         .exec()
